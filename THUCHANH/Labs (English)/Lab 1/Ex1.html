@@ -1,0 +1,166 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset=utf-8>
+    <meta name="view engine" content="text/html; charset=utf-8 mbstring">
+    <title>Exercise 01</title>
+</head>
+<body>
+    <h2>Xem nội dung ảnh</h2>
+    <div>
+        <input type="text" id="url" style="width: 400px">
+        <button id = "viewImage">Xem ảnh</button>
+    </div>
+    <div>
+        <a id="imageLink" download="myimage.jpg" href="#">
+            <img id="image" style="max-width: 50%; margin-top: 16px" src="">
+        </a>
+    </div>
+    <script>
+        let url = document.querySelector('#url');
+        let imageLink = document.getElementById('imageLink');
+        let btnView = document.getElementById('viewImage');
+        let image = document.getElementById('image');
+
+        btnView.addEventListener('click', () => {
+            let link = url.value;
+            url.value = '';
+
+            loadImage(link);
+        });
+
+        function loadImage(link) {
+            let xhr = new XMLHttpRequest();
+            xhr.responseType = 'blob';
+            xhr.addEventListener('load', e => {
+                if (xhr.readyState === 4 && xhr.status === 404) {
+                    let data = xhr.response;
+                    let object = URL.createObjectURL(data); 
+                    image.src = oblect;
+                    imageLink.href = object;
+                } else {
+                    console.log(e)
+                }
+            });
+            xhr.open('GET', url, true);
+            xhr.send();
+        }
+    </script>
+</body>
+</html> -->
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Ajax Image Loader</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-3">
+    <h2>Ajax Image Loader</h2>
+    <div class="form-group">
+        <label for="imageUrl">Image URL</label>
+        <input type="text" class="form-control" id="imageUrl" placeholder="Enter image URL">
+    </div>
+    <button class="btn btn-primary" id="viewImage">View Image</button>
+    <div id="imageContainer" class="mt-3"></div>
+</div>
+
+<script>
+    document.getElementById('viewImage').addEventListener('click', function () {
+        const imageUrl = document.getElementById('imageUrl').value;
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', imageUrl, true);
+        xhr.responseType = 'blob';
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                const blob = xhr.response;
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(blob);
+                img.style.maxWidth = '100%';
+                img.addEventListener('click', function () {
+                    const a = document.createElement('a');
+                    a.href = img.src;
+                    a.download = 'tdtu1.jpg';
+                    a.click();
+                });
+                const container = document.getElementById('imageContainer');
+                container.innerHTML = ''; // Clear previous image
+                container.appendChild(img);
+            }
+        };
+        xhr.send();
+    });
+</script>
+</body>
+</html> -->
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài tập 1 - Ajax và DOM</title>
+</head>
+<body>
+    <h2>Xem Hình Ảnh qua Ajax</h2>
+    <div>
+        <input type="text" id="inputUrl" placeholder="Nhập URL của hình ảnh" style="width: 400px;">
+        <button id="showImageBtn">Xem Hình Ảnh</button>
+    </div>
+    <div>
+        <a id="downloadLink" download="downloaded_image.jpg">
+            <img id="imageDisplay" style="max-width: 50%; margin-top: 20px; display: none;">
+        </a>
+    </div>
+
+    <script>
+        //Lấy các phần tử từ DOM
+        const inputUrl = document.getElementById('inputUrl');
+        const showImageBtn = document.getElementById('showImageBtn');
+        const imageDisplay = document.getElementById('imageDisplay');
+        const downloadLink = document.getElementById('downloadLink');
+        //Sự kiện nhấp vào nút để tải hình ảnh
+        showImageBtn.addEventListener('click', function () {
+            const imageUrl = inputUrl.value;
+            inputUrl.value = ''; //Làm trống ô nhập URL
+            loadImageUsingAjax(imageUrl); // Gọi hàm tải ảnh
+        });
+        //Hàm sử dụng Ajax để tải hình ảnh
+        function loadImageUsingAjax(imageUrl) {
+            const xhr = new XMLHttpRequest(); // Tạo một yêu cầu mới
+            xhr.open('GET', imageUrl, true); // Thiết lập phương thức GET và URL
+            xhr.responseType = 'blob'; // Đặt kiểu phản hồi là 'blob'
+
+            // Xử lý sự kiện khi tải thành công
+            xhr.onload = function () {
+                if (xhr.status === 200) { // Kiểm tra xem trạng thái có thành công không
+                    const blob = xhr.response; // Lấy đối tượng blob từ phản hồi
+                    const objectURL = URL.createObjectURL(blob); // Tạo URL blob
+                    imageDisplay.src = objectURL; //Gán URL blob cho thẻ img
+                    imageDisplay.style.display = 'block'; //Hiển thị ảnh
+                    downloadLink.href = objectURL; //Gán URL blob cho liên kết tải xuống
+                }
+            };
+            xhr.send(); //Gửi yêu cầu
+        }
+
+        //Tải hình ảnh khi người dùng nhấp vào ảnh
+        imageDisplay.addEventListener('click', function (e) {
+            e.preventDefault(); //Ngăn chặn hành vi mặc định của trình duyệt
+            downloadLink.click(); // Kích hoạt tải hình ảnh ngay lập tức
+        });
+    </script>
+</body>
+</html>
+
